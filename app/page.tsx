@@ -10,9 +10,36 @@ export const metadata: Metadata = {
     "Enter your debt balance, interest rate, and monthly payment to see your exact debt-free date. Compare Avalanche vs. Snowball strategies. 100% free, no signup.",
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Debt Payoff Calculator",
+      description:
+        "Free debt payoff calculator using the Avalanche and Snowball methods. See your exact debt-free date and total interest cost.",
+      url: "https://debt-payment-roadmap-git-main-dejesusantonios-projects.vercel.app",
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Web",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+    {
+      "@type": "Organization",
+      name: "Debt Mastery",
+      url: "https://debt-payment-roadmap-git-main-dejesusantonios-projects.vercel.app",
+      description:
+        "Free tools and strategies to help you eliminate debt faster using proven payoff methods.",
+    },
+  ],
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection />
 

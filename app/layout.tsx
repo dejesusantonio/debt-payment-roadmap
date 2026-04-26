@@ -12,7 +12,12 @@ const inter = Inter({
 
 // ─── SEO Metadata ──────────────────────────────────────────────────────────────
 // Optimized for high-intent personal finance keywords with strong CTR signals.
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  "https://debt-payment-roadmap-git-main-dejesusantonios-projects.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
     default: "Debt Payment Roadmap — Free Debt Payoff Calculator & Income Accelerator",
     template: "%s | Debt Payment Roadmap",

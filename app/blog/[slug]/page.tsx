@@ -52,6 +52,10 @@ export async function generateMetadata({
   };
 }
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  "https://debt-payment-roadmap-git-main-dejesusantonios-projects.vercel.app";
+
 const CATEGORY_COLORS: Record<string, "success" | "info" | "warning" | "secondary"> = {
   "Debt Strategy": "success",
   "Savings": "info",
@@ -78,8 +82,24 @@ export default async function BlogPostPage({
   const badgeVariant = CATEGORY_COLORS[post.category] ?? "secondary";
   const relatedPosts = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    author: { "@type": "Person", name: post.author },
+    keywords: post.tags.join(", "),
+    url: `${BASE_URL}/blog/${post.slug}`,
+    publisher: { "@type": "Organization", name: "Debt Mastery", url: BASE_URL },
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Article header */}
       <div className="bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">
         <div className="container-tight section-padding">
