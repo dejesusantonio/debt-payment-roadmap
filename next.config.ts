@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode for catching potential issues early
+  output: "export",
   reactStrictMode: true,
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
