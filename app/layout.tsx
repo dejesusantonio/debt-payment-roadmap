@@ -14,8 +14,8 @@ const inter = Inter({
 // Optimized for high-intent personal finance keywords with strong CTR signals.
 export const metadata: Metadata = {
   title: {
-    default: "Debt Mastery — Free Debt Payoff Calculator & Income Accelerator",
-    template: "%s | Debt Mastery",
+    default: "Debt Payment Roadmap — Free Debt Payoff Calculator & Income Accelerator",
+    template: "%s | Debt Payment Roadmap",
   },
   description:
     "Calculate your debt-free date using the Avalanche or Snowball method. Discover side hustles to accelerate your payoff. Free tools, no signup required.",
