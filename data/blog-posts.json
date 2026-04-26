@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "slug": "debt-avalanche-vs-snowball",
+    "title": "Debt Avalanche vs. Snowball: Which Strategy Saves You the Most Money?",
+    "excerpt": "Two proven methods. One clear mathematical winner. But the best strategy is the one you'll actually stick with — and the data might surprise you.",
+    "category": "Debt Strategy",
+    "readTime": 8,
+    "publishedAt": "2024-02-10",
+    "author": "Marcus Webb",
+    "tags": ["debt payoff", "avalanche method", "snowball method", "interest savings"],
+    "featured": true
+  },
+  {
+    "id": "2",
+    "slug": "build-1000-emergency-fund-90-days",
+    "title": "How to Build a $1,000 Emergency Fund in 90 Days (Even on a Tight Budget)",
+    "excerpt": "A financial safety net stops one car repair from derailing your entire debt payoff plan. Here's the fastest path from $0 to your first $1,000 buffer.",
+    "category": "Savings",
+    "readTime": 6,
+    "publishedAt": "2024-02-03",
+    "author": "Sara Chen",
+    "tags": ["emergency fund", "budgeting", "savings tips"],
+    "featured": false
+  },
+  {
+    "id": "3",
+    "slug": "negotiate-lower-credit-card-interest-rate",
+    "title": "Call Your Credit Card Issuer Today: The Exact Script to Negotiate a Lower APR",
+    "excerpt": "One 10-minute phone call can reduce your interest rate by 3–5 percentage points. We walk you through exactly what to say — and what not to say.",
+    "category": "Debt Strategy",
+    "readTime": 5,
+    "publishedAt": "2024-01-28",
+    "author": "Marcus Webb",
+    "tags": ["APR negotiation", "credit cards", "interest rate reduction"],
+    "featured": false
+  },
+  {
+    "id": "4",
+    "slug": "side-hustles-that-generated-extra-income",
+    "title": "7 Side Hustles That Generated $500–$2,000 Extra Per Month for Real People",
+    "excerpt": "These aren't theoretical income ideas. These are proven strategies used by readers who accelerated their debt payoff by 2–4 years without a second job.",
+    "category": "Income",
+    "readTime": 10,
+    "publishedAt": "2024-01-21",
+    "author": "Priya Nair",
+    "tags": ["side hustle", "extra income", "debt payoff acceleration"],
+    "featured": false
+  },
+  {
+    "id": "5",
+    "slug": "zero-based-budgeting-complete-guide",
+    "title": "Zero-Based Budgeting: Give Every Dollar a Job and Watch Your Debt Vanish",
+    "excerpt": "In zero-based budgeting, income minus expenses equals zero — not because you spent everything, but because every dollar has a deliberate purpose. Here's the setup.",
+    "category": "Budgeting",
+    "readTime": 9,
+    "publishedAt": "2024-01-14",
+    "author": "Sara Chen",
+    "tags": ["zero-based budgeting", "personal finance", "spending plan"],
+    "featured": false
+  },
+  {
+    "id": "6",
+    "slug": "balance-transfer-cards-smart-guide",
+    "title": "Balance Transfer Cards in 2024: When They're a Smart Move (and When They're a Trap)",
+    "excerpt": "A 0% APR promotional offer can save hundreds in interest — or extend your debt by years if misused. Learn the four rules before you transfer a single dollar.",
+    "category": "Debt Strategy",
+    "readTime": 7,
+    "publishedAt": "2024-01-07",
+    "author": "Marcus Webb",
+    "tags": ["balance transfer", "credit cards", "0% APR", "debt consolidation"],
+    "featured": false
+  }
+]
