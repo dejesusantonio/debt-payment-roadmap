@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Nord — Independent Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['"Playfair Display"', 'serif'],
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --paper:        #f3efe7;
+    --paper-deep:   #e8e2d4;
+    --ink:          #1a1814;
+    --ink-soft:     #44403a;
+    --ink-mute:     #8a857a;
+    --rule:         #c8c1b1;
+    --accent:       #c4421a;
+    --accent-deep:  #962f10;
+    --serif-tracking: -0.03em;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .serif { font-family: 'Playfair Display', serif; letter-spacing: var(--serif-tracking); }
+  .mono  { font-family: 'JetBrains Mono', monospace; }
+
+  /* Custom rules — replace tailwind border/shadow defaults */
+  .rule-h { border-top: 1px solid var(--rule); }
+  .rule-v { border-left: 1px solid var(--rule); }
+  .ink-rule-h { border-top: 1px solid var(--ink); }
+
+  /* Custom shadow — none of the default tailwind drop shadows */
+  .lift {
+    box-shadow:
+      0 1px 0 0 var(--ink) inset,
+      18px 18px 0 -16px var(--ink);
+  }
+
+  /* Marquee */
+  @keyframes drift-x {
+    from { transform: translate3d(0,0,0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .drift { animation: drift-x 40s linear infinite; will-change: transform; }
+
+  /* Hero word reveal */
+  @keyframes mask-rise {
+    0%   { transform: translate3d(0, 110%, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+  .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; }
+  .word-mask > span {
+    display: inline-block;
+    transform: translate3d(0, 110%, 0);
+    animation-name: mask-rise;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.2, 0.85, 0.2, 1);
+    animation-fill-mode: forwards;
+  }
+  .word-mask.shown > span { transform: translate3d(0, 0, 0); }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translate3d(0, 16px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  .fade-up { animation: fade-up 1s 0.4s cubic-bezier(0.2, 0.85, 0.2, 1) both; }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 0.9s cubic-bezier(0.2, 0.85, 0.2, 1),
+                transform 0.9s cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  .reveal.delay-1 { transition-delay: 0.08s; }
+  .reveal.delay-2 { transition-delay: 0.16s; }
+  .reveal.delay-3 { transition-delay: 0.24s; }
+  .reveal.delay-4 { transition-delay: 0.32s; }
+
+  /* Hover-reveal frame */
+  .hover-frame {
+    position: relative;
+    cursor: pointer;
+  }
+  .hover-frame .lid {
+    position: absolute; inset: 0;
+    background: var(--paper);
+    transform-origin: top;
+    transition: transform 0.7s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .hover-frame:hover .lid { transform: scaleY(0); }
+  .hover-frame .meta {
+    transition: transform 0.5s cubic-bezier(0.2, 0.85, 0.2, 1),
+                opacity 0.5s cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .hover-frame:hover .meta { transform: translateY(-4px); }
+  .hover-frame .index-num {
+    transition: letter-spacing 0.5s cubic-bezier(0.2, 0.85, 0.2, 1),
+                color 0.5s ease;
+  }
+  .hover-frame:hover .index-num {
+    letter-spacing: 0.15em;
+    color: var(--accent);
+  }
+
+  /* Caret blink */
+  @keyframes blink { 50% { opacity: 0; } }
+  .caret { animation: blink 1.1s step-end infinite; }
+
+  /* Cursor */
+  .cursor-dot {
+    position: fixed;
+    pointer-events: none;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translate3d(-50%, -50%, 0);
+    transition: width 0.25s, height 0.25s, background 0.25s;
+    z-index: 90;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot.big { width: 56px; height: 56px; background: var(--accent); }
+
+  /* Index numerals */
+  .num-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+
+  /* Hero ornament */
+  .ornament {
+    width: 1px; height: 100%;
+    background: var(--ink);
+    transform-origin: bottom;
+    animation: rule-grow 1.4s 0.2s cubic-bezier(0.2, 0.85, 0.2, 1) both;
+  }
+  @keyframes rule-grow {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+
+  /* Project image stylized — using gradient + grain */
+  .grain {
+    position: relative;
+    overflow: hidden;
+  }
+  .grain::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* Tile palettes */
+  .tile-1 { background: linear-gradient(135deg, #c4421a 0%, #7a2310 100%); }
+  .tile-2 { background: linear-gradient(160deg, #1a1814 0%, #3c372e 100%); }
+  .tile-3 { background: linear-gradient(140deg, #d8c9a4 0%, #b39d6f 100%); }
+  .tile-4 { background: linear-gradient(120deg, #2c4a3e 0%, #4a6b59 100%); }
+  .tile-5 { background: linear-gradient(150deg, #786556 0%, #514234 100%); }
+  .tile-6 { background: linear-gradient(135deg, #b89a5e 0%, #8a6f3d 100%); }
+
+  /* Index sidebar dot follow */
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink-mute);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .nav-dot.on { background: var(--accent); transform: scale(2); }
+
+  /* Hero giant numeral */
+  .hero-num {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Cap-line */
+  .capline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  /* Selection */
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  /* Section anchor offset */
+  section[id] { scroll-margin-top: 0; }
+
+  /* About column rule */
+  .about-rule {
+    position: relative;
+  }
+  .about-rule::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--ink);
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 1.2s cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .about-rule.in::before { transform: scaleY(1); }
+
+  /* Work tile aspect */
+  .ratio-3-4 { aspect-ratio: 3 / 4; }
+  .ratio-4-5 { aspect-ratio: 4 / 5; }
+  .ratio-1-1 { aspect-ratio: 1 / 1; }
+  .ratio-5-7 { aspect-ratio: 5 / 7; }
+
+  /* Marquee text */
+  .marquee-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(60px, 9vw, 140px);
+    letter-spacing: var(--serif-tracking);
+    color: var(--ink);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* Footer year */
+  .super { vertical-align: super; font-size: 0.55em; }
+
+  /* Custom button */
+  .btn-line {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 14px 0;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-line::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px; background: var(--ink);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .btn-line:hover::after { transform: scaleX(0); transform-origin: left; }
+  .btn-line .arrow { transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1); }
+  .btn-line:hover .arrow { transform: translateX(8px); }
+
+  /* Topnav letterspaced */
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    position: relative;
+    padding: 4px 0;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px; background: var(--ink);
+    transform-origin: right; transform: scaleX(0);
+    transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+  .nav-link.active::after { transform: scaleX(1); transform-origin: left; }
+
+  /* Image-card details */
+  .card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Scrollytelling — pinned column */
+  .pin-col {
+    position: sticky;
+    top: 96px;
+  }
+
+  /* Hero responsive */
+  @media (max-width: 900px) {
+    .hero-num { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursor"></div>
+
+<!-- ─────────────────────────────────────────────────────────── NAV -->
+<header class="fixed top-0 left-0 right-0 z-50 mix-blend-difference text-[#f3efe7]">
+  <div class="grid grid-cols-12 items-center px-8 py-6">
+    <a href="#top" class="col-span-3 flex items-baseline gap-3">
+      <span class="serif italic text-[20px] leading-none">Atelier</span>
+      <span class="mono text-[10px] tracking-[0.3em] opacity-70">— NORD</span>
+    </a>
+    <nav class="col-span-6 flex items-center justify-center gap-12">
+      <a href="#work" class="nav-link active">Work<span class="opacity-50 ml-1">/01</span></a>
+      <a href="#studio" class="nav-link">Studio<span class="opacity-50 ml-1">/02</span></a>
+      <a href="#process" class="nav-link">Process<span class="opacity-50 ml-1">/03</span></a>
+      <a href="#journal" class="nav-link">Journal<span class="opacity-50 ml-1">/04</span></a>
+    </nav>
+    <div class="col-span-3 flex items-center justify-end gap-6">
+      <span class="mono text-[10px] tracking-[0.18em] opacity-70" id="clock">— 04:18 OSL</span>
+      <a href="#contact" class="nav-link">Contact ↗</a>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────────────────────────────────────────────────────── HERO -->
+<section id="top" class="relative min-h-screen pt-32 pb-16 px-8" data-screen-label="01 Hero">
+
+  <!-- Top metadata strip -->
+  <div class="grid grid-cols-12 gap-8 mb-32">
+    <div class="col-span-3 capline fade-up">
+      Independent Studio<br/>
+      Est. MMXIX · Oslo
+    </div>
+    <div class="col-span-3 col-start-10 capline fade-up text-right">
+      Index №&nbsp;<span class="text-[var(--ink)]">001</span><br/>
+      Spring Edition · 2026
+    </div>
+  </div>
+
+  <!-- The headline — asymmetrical grid -->
+  <div class="grid grid-cols-12 gap-8 relative">
+
+    <!-- Giant numeral floating top-right -->
+    <div class="hero-num text-[clamp(180px,24vw,360px)] leading-none right-[6vw] top-[-40px] fade-up" style="animation-delay: 0.6s;">
+      <span class="serif italic">07</span>
+    </div>
+
+    <!-- Eyebrow rule + label -->
+    <div class="col-span-2 flex flex-col items-start pt-3">
+      <div style="height: 80px;" class="ornament"></div>
+      <div class="mt-6 capline">Manifesto<br/>№&nbsp;001</div>
+    </div>
+
+    <!-- Headline — sits in cols 3..10 -->
+    <h1 class="col-span-9 col-start-3 serif font-medium text-[var(--ink)] leading-[0.92]" style="font-size: clamp(56px, 9.2vw, 168px);">
+      <span class="word-mask"><span style="animation-delay: 0.05s;">We make</span></span><br/>
+      <span class="word-mask"><span style="animation-delay: 0.18s;">things that</span></span>
+      <span class="word-mask"><span style="animation-delay: 0.30s; font-style: italic; color: var(--accent);">linger</span></span><br/>
+      <span class="word-mask"><span style="animation-delay: 0.42s;">in the</span></span>
+      <span class="word-mask"><span style="animation-delay: 0.54s;">room.</span></span>
+    </h1>
+
+    <!-- Lower deck: paragraph + index -->
+    <div class="col-span-4 col-start-3 mt-14 fade-up" style="animation-delay: 0.85s;">
+      <p class="text-[15px] leading-[1.65] text-[var(--ink-soft)] max-w-[36ch]">
+        A studio of seven, working from a converted print-shop in Grünerløkka.
+        We design identity systems, editorial publications and the occasional digital
+        artefact — for clients who can wait three months for the right answer.
+      </p>
+    </div>
+
+    <div class="col-span-3 col-start-9 mt-14 fade-up" style="animation-delay: 1s;">
+      <div class="capline mb-4">Selected clients</div>
+      <ul class="serif italic text-[18px] leading-[1.55] text-[var(--ink)] space-y-1">
+        <li>Norsk Folkemuseum</li>
+        <li>Kvadrat &amp; Raf Simons</li>
+        <li>Mast Brothers Chocolate</li>
+        <li>Holzweiler</li>
+        <li>The Whitney</li>
+      </ul>
+    </div>
+
+    <!-- Bottom row: scroll cue + status -->
+    <div class="col-span-12 mt-32 grid grid-cols-12 items-end gap-8">
+      <div class="col-span-3 fade-up" style="animation-delay: 1.2s;">
+        <div class="capline mb-4">Currently</div>
+        <div class="text-[14px]">
+          <span class="inline-block w-[6px] h-[6px] rounded-full bg-[var(--accent)] mr-2 align-middle"></span>
+          Booking projects for autumn 2026
+        </div>
+      </div>
+
+      <div class="col-span-3 col-start-5 fade-up text-center" style="animation-delay: 1.3s;">
+        <div class="capline mb-2">Scroll · Index follows</div>
+        <div class="serif italic text-[14px] text-[var(--ink-mute)]">↓</div>
+      </div>
+
+      <div class="col-span-3 col-start-10 fade-up text-right" style="animation-delay: 1.4s;">
+        <div class="capline mb-4">Awards 2025</div>
+        <div class="serif italic text-[15px] leading-[1.4]">
+          ADC Gold · D&amp;AD Wood Pencil<br/>
+          TDC New York · Type Directors
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── MARQUEE -->
+<section class="rule-h py-10 overflow-hidden">
+  <div class="flex drift">
+    <div class="marquee-text pr-16">Identity · Print · Editorial · Wayfinding · Type Design · Identity · Print · Editorial · Wayfinding · Type Design ·&nbsp;</div>
+    <div class="marquee-text pr-16" aria-hidden="true">Identity · Print · Editorial · Wayfinding · Type Design · Identity · Print · Editorial · Wayfinding · Type Design ·&nbsp;</div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── WORK INDEX -->
+<section id="work" class="px-8 pt-32 pb-24" data-screen-label="02 Work Index">
+  <div class="grid grid-cols-12 gap-8 mb-24">
+    <div class="col-span-2 capline reveal">02<br/>Selected work</div>
+    <h2 class="col-span-7 col-start-4 serif font-normal leading-[0.95] reveal" style="font-size: clamp(40px, 6vw, 96px);">
+      Twelve projects from<br/>
+      <span class="italic text-[var(--accent)]">a quiet&nbsp;year</span>.
+    </h2>
+    <div class="col-span-2 col-start-11 capline text-right reveal delay-2">12 / 24<br/>shown below</div>
+  </div>
+
+  <!-- Asymmetric grid -->
+  <div class="grid grid-cols-12 gap-x-8 gap-y-24">
+
+    <!-- 01 -->
+    <article class="hover-frame col-span-5 reveal">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 001</span>
+        <span class="card-meta text-[var(--ink-mute)]">Identity · 2025</span>
+      </div>
+      <div class="grain ratio-4-5 tile-1 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[28px] leading-[1.05]">Folkemuseet, rebound.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[34ch]">A 130-year-old institution, refit with a typeface drawn from its own card catalogue.</p>
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="hover-frame col-span-4 col-start-8 mt-32 reveal delay-2">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 002</span>
+        <span class="card-meta text-[var(--ink-mute)]">Editorial · 2025</span>
+      </div>
+      <div class="grain ratio-3-4 tile-2 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[28px] leading-[1.05]"><span class="italic">Småtrykk</span>, Issue 04.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[34ch]">A 168-page anthology on Nordic printers, set entirely in metal type.</p>
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="hover-frame col-span-3 col-start-2 reveal">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 003</span>
+        <span class="card-meta text-[var(--ink-mute)]">Type · 2024</span>
+      </div>
+      <div class="grain ratio-1-1 tile-3 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[24px] leading-[1.05]">Holzweiler Display.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[28ch]">A custom didone for a fashion house's autumn campaign.</p>
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="hover-frame col-span-5 col-start-6 reveal delay-2">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 004</span>
+        <span class="card-meta text-[var(--ink-mute)]">Wayfinding · 2024</span>
+      </div>
+      <div class="grain ratio-4-5 tile-4 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[28px] leading-[1.05]">Botanisk Hage signage.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[34ch]">42 wayfinding markers, hand-routed in oak by a workshop in Drøbak.</p>
+      </div>
+    </article>
+
+    <!-- 05 -->
+    <article class="hover-frame col-span-4 col-start-3 mt-16 reveal">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 005</span>
+        <span class="card-meta text-[var(--ink-mute)]">Packaging · 2024</span>
+      </div>
+      <div class="grain ratio-5-7 tile-5 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[28px] leading-[1.05]"><span class="italic">Nordstrand</span> Aquavit.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[34ch]">Letterpress labels, foil-stamped on uncoated cotton — for a small distillery in Trøndelag.</p>
+      </div>
+    </article>
+
+    <!-- 06 -->
+    <article class="hover-frame col-span-3 col-start-9 mt-16 reveal delay-2">
+      <div class="flex items-baseline justify-between mb-4">
+        <span class="num-tag index-num">— 006</span>
+        <span class="card-meta text-[var(--ink-mute)]">Web · 2024</span>
+      </div>
+      <div class="grain ratio-1-1 tile-6 lift">
+        <div class="lid"></div>
+      </div>
+      <div class="meta mt-5">
+        <h3 class="serif text-[24px] leading-[1.05]">Kvadrat archive.</h3>
+        <p class="text-[13px] text-[var(--ink-soft)] mt-2 max-w-[28ch]">A reading room — 400 textile swatches, photographed and indexed.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="mt-32 grid grid-cols-12 gap-8">
+    <div class="col-span-4 col-start-5 text-center reveal">
+      <a href="#" class="btn-line">
+        <span>View the full archive · 24 projects</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── STUDIO -->
+<section id="studio" class="px-8 pt-32 pb-24 relative" data-screen-label="03 Studio">
+  <div class="grid grid-cols-12 gap-8">
+    <div class="col-span-2 capline reveal">03<br/>The studio</div>
+
+    <div class="col-span-7 col-start-4 about-rule pl-10 reveal">
+      <div class="capline mb-8">Note from the founders</div>
+
+      <p class="serif text-[var(--ink)] leading-[1.18] mb-10" style="font-size: clamp(28px, 3.4vw, 48px);">
+        Most studios will tell you they're <span class="italic">obsessed with detail</span>.
+        We are, but the more useful claim is that we are
+        <span class="italic text-[var(--accent)]">obsessed with patience</span> — the slow kind, the
+        kind that only pays off in year three.
+      </p>
+
+      <div class="grid grid-cols-2 gap-12 text-[14px] text-[var(--ink-soft)] leading-[1.7]">
+        <div>
+          We were founded in 2019 by two book designers who'd grown tired of arguing
+          for kerning over zoom calls. The studio has stayed deliberately small — seven
+          people, one printer, one part-time dog — and we take on roughly nine projects
+          a year.
+        </div>
+        <div>
+          We work in long arcs. A typical engagement runs ten to fourteen weeks, and
+          most of our clients return for a second or third project. Identity work
+          sometimes runs into typeface design; editorial work sometimes runs into
+          architecture. We follow the thread.
+        </div>
+      </div>
+
+      <div class="mt-16 grid grid-cols-3 gap-8 reveal delay-2">
+        <div>
+          <div class="serif italic text-[64px] leading-none text-[var(--accent)]">07</div>
+          <div class="capline mt-3">Designers<br/>and one printer</div>
+        </div>
+        <div>
+          <div class="serif italic text-[64px] leading-none text-[var(--accent)]">14</div>
+          <div class="capline mt-3">Average project<br/>duration, weeks</div>
+        </div>
+        <div>
+          <div class="serif italic text-[64px] leading-none text-[var(--accent)]">183</div>
+          <div class="capline mt-3">Books, journals<br/>and posters since '19</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-2 col-start-11 capline text-right reveal delay-3">
+      Office<br/>Markveien 35B<br/>0554 Oslo<br/><br/>59°&thinsp;55'&thinsp;N<br/>10°&thinsp;45'&thinsp;E
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── PROCESS -->
+<section id="process" class="px-8 pt-32 pb-32 rule-h" data-screen-label="04 Process">
+  <div class="grid grid-cols-12 gap-8 mb-24">
+    <div class="col-span-2 capline reveal">04<br/>Process</div>
+    <h2 class="col-span-9 col-start-4 serif font-normal leading-[0.95] reveal" style="font-size: clamp(40px, 6vw, 96px);">
+      Four phases. <span class="italic text-[var(--accent)]">No&nbsp;shortcuts</span>.
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-12 gap-8 gap-y-20">
+    <ProcessRow num="i" title="Listening" weeks="1—2" body="We start over coffee. Then dinner. Then a conversation with whoever in your organisation knows where the bodies are buried. We don't begin sketching until that's done."/>
+    <ProcessRow num="ii" title="Drawing" weeks="3—7" body="The slow part. Pencil first, screen second. We work in iteration — five rounds is normal, ten is not unusual. We share weekly, not daily."/>
+    <ProcessRow num="iii" title="Specifying" weeks="8—11" body="We document everything: type stacks, paper stocks, exact ink mixes, the temperature at which a die-cut should be pressed. Specification is the design."/>
+    <ProcessRow num="iv" title="Making" weeks="12—14" body="We sit on press. We physically attend the binder. The job is not done until the first hundred copies are off the line and inspected, by hand, by us."/>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── JOURNAL -->
+<section id="journal" class="px-8 pt-32 pb-24" data-screen-label="05 Journal">
+  <div class="grid grid-cols-12 gap-8 mb-20">
+    <div class="col-span-2 capline reveal">05<br/>Journal</div>
+    <h2 class="col-span-7 col-start-4 serif font-normal leading-[0.95] reveal" style="font-size: clamp(40px, 5.5vw, 84px);">
+      Things we wrote down.
+    </h2>
+    <div class="col-span-2 col-start-11 capline text-right reveal">3 of 47<br/>entries</div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-8">
+    <JournalEntry idx="041" date="14 March 2026" title="In defence of the wide margin" topic="Editorial" len="6 min" delay="0"/>
+    <JournalEntry idx="042" date="02 February 2026" title="Why we still letterpress" topic="Print" len="9 min" delay="1"/>
+    <JournalEntry idx="043" date="11 January 2026" title="Ten typefaces, redrawn from memory" topic="Type" len="11 min" delay="2"/>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── CONTACT -->
+<section id="contact" class="px-8 pt-32 pb-16 ink-rule-h relative" data-screen-label="06 Contact" style="background: var(--ink); color: var(--paper);">
+  <div class="grid grid-cols-12 gap-8 mb-32">
+    <div class="col-span-2 capline reveal" style="color: rgba(243,239,231,0.6);">06<br/>Begin</div>
+    <h2 class="col-span-10 col-start-3 serif font-normal leading-[0.92] reveal" style="font-size: clamp(56px, 10vw, 180px); color: var(--paper);">
+      Got a project<br/>
+      <span class="italic" style="color: #e9a47b;">that deserves</span><br/>
+      a year of thought?
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-12 gap-8 mb-24">
+    <div class="col-span-3 col-start-3 reveal">
+      <div class="capline" style="color: rgba(243,239,231,0.5);">Studio enquiries</div>
+      <a href="#" class="serif italic mt-3 inline-block" style="font-size: 28px; color: var(--paper);">studio@<br/>atelier-nord.no</a>
+    </div>
+    <div class="col-span-3 col-start-7 reveal delay-1">
+      <div class="capline" style="color: rgba(243,239,231,0.5);">Press &amp; speaking</div>
+      <a href="#" class="serif italic mt-3 inline-block" style="font-size: 28px; color: var(--paper);">press@<br/>atelier-nord.no</a>
+    </div>
+    <div class="col-span-3 col-start-10 reveal delay-2">
+      <div class="capline" style="color: rgba(243,239,231,0.5);">Visit</div>
+      <p class="serif italic mt-3" style="font-size: 22px; line-height: 1.3;">Markveien 35B<br/>By appointment,<br/>Tue – Thu</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-8 pt-12 border-t" style="border-color: rgba(243,239,231,0.2);">
+    <div class="col-span-3 capline" style="color: rgba(243,239,231,0.5);">
+      © Atelier Nord 2019—2026
+    </div>
+    <div class="col-span-6 col-start-4 flex justify-center gap-10 capline" style="color: rgba(243,239,231,0.5);">
+      <a href="#">Instagram&nbsp;↗</a>
+      <a href="#">Are.na&nbsp;↗</a>
+      <a href="#">Newsletter (monthly)&nbsp;↗</a>
+    </div>
+    <div class="col-span-3 col-start-10 text-right capline" style="color: rgba(243,239,231,0.5);">
+      Site v.4.2 · Set in Playfair &amp; Inter
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── DEFS -->
+<script type="text/babel">
+function ProcessRow(){}
+function JournalEntry(){}
+</script>
+
+<script>
+  // Replace JSX-looking custom tags before render — we're not actually using React.
+  // The <ProcessRow/> and <JournalEntry/> tags above are placeholders; replace with HTML.
+</script>
+
+<script>
+  // Build process rows + journal entries with real DOM (no React, just custom JS).
+  // Find placeholders and replace.
+  (function () {
+    const procData = [
+      { num: 'i',   title: 'Listening',   weeks: '1—2',   body: "We start over coffee. Then dinner. Then a conversation with whoever in your organisation knows where the bodies are buried. We don't begin sketching until that's done." },
+      { num: 'ii',  title: 'Drawing',     weeks: '3—7',   body: "The slow part. Pencil first, screen second. We work in iteration — five rounds is normal, ten is not unusual. We share weekly, not daily." },
+      { num: 'iii', title: 'Specifying',  weeks: '8—11',  body: "We document everything: type stacks, paper stocks, exact ink mixes, the temperature at which a die-cut should be pressed. Specification is the design." },
+      { num: 'iv',  title: 'Making',      weeks: '12—14', body: "We sit on press. We physically attend the binder. The job is not done until the first hundred copies are off the line and inspected, by hand, by us." },
+    ];
+    const journalData = [
+      { idx: '041', date: '14 March 2026',   title: 'In defence of the wide margin',   topic: 'Editorial', len: '6 min',  delay: 0 },
+      { idx: '042', date: '02 February 2026',title: 'Why we still letterpress',         topic: 'Print',     len: '9 min',  delay: 1 },
+      { idx: '043', date: '11 January 2026', title: 'Ten typefaces, redrawn from memory', topic: 'Type',    len: '11 min', delay: 2 },
+    ];
+
+    // Replace ProcessRow placeholders
+    document.querySelectorAll('ProcessRow').forEach((node, i) => {
+      const d = procData[i] || procData[0];
+      const div = document.createElement('div');
+      div.className = 'col-span-12 grid grid-cols-12 gap-8 reveal pt-12 rule-h';
+      div.innerHTML = `
+        <div class="col-span-1 serif italic text-[var(--accent)]" style="font-size: clamp(40px, 4vw, 64px); line-height: 1;">${d.num}</div>
+        <div class="col-span-3 col-start-3">
+          <div class="capline mb-3">Phase / week ${d.weeks}</div>
+          <h3 class="serif" style="font-size: clamp(32px, 3.2vw, 48px); line-height: 1.05;">${d.title}.</h3>
+        </div>
+        <div class="col-span-5 col-start-7 pt-2">
+          <p class="text-[15px] leading-[1.7] text-[var(--ink-soft)] max-w-[52ch]">${d.body}</p>
+        </div>
+      `;
+      node.replaceWith(div);
+    });
+
+    // Replace JournalEntry placeholders
+    const j = document.querySelectorAll('JournalEntry');
+    j.forEach((node, i) => {
+      const d = journalData[i] || journalData[0];
+      const a = document.createElement('a');
+      a.href = '#';
+      a.className = `col-span-4 group block reveal delay-${d.delay} hover-frame`;
+      a.innerHTML = `
+        <div class="flex items-baseline justify-between mb-6 pb-3 rule-h pt-6">
+          <span class="num-tag index-num">— ${d.idx}</span>
+          <span class="card-meta text-[var(--ink-mute)]">${d.topic} · ${d.len}</span>
+        </div>
+        <div class="capline mb-3">${d.date}</div>
+        <h3 class="serif" style="font-size: clamp(28px, 2.6vw, 40px); line-height: 1.05;">${d.title}.</h3>
+        <div class="mt-8 capline flex items-center gap-3 meta">
+          <span>Read entry</span>
+          <span class="arrow">→</span>
+        </div>
+      `;
+      node.replaceWith(a);
+    });
+  })();
+</script>
+
+<script>
+  // Hero word-mask fallback — guarantee visibility even if CSS animation misses
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.word-mask').forEach(m => m.classList.add('shown'));
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.word-mask > span').forEach(s => {
+      s.style.transform = 'translate3d(0,0,0)';
+    });
+  }, 1600);
+
+  // Reveal-on-scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal, .about-rule').forEach(el => io.observe(el));
+
+  // Custom cursor
+  const dot = document.getElementById('cursor');
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let cx = mx, cy = my;
+  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function tick() {
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    dot.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+  document.querySelectorAll('a, button, .hover-frame').forEach(el => {
+    el.addEventListener('mouseenter', () => dot.classList.add('big'));
+    el.addEventListener('mouseleave', () => dot.classList.remove('big'));
+  });
+
+  // Active nav link
+  const sections = ['#work', '#studio', '#process', '#journal'].map(id => document.querySelector(id));
+  const navLinks = document.querySelectorAll('header .nav-link');
+  function syncNav() {
+    const y = window.scrollY + window.innerHeight * 0.35;
+    let active = -1;
+    sections.forEach((s, i) => { if (s && s.offsetTop <= y) active = i; });
+    navLinks.forEach(l => l.classList.remove('active'));
+    if (active >= 0 && navLinks[active]) navLinks[active].classList.add('active');
+    else if (navLinks[0]) navLinks[0].classList.add('active');
+  }
+  window.addEventListener('scroll', syncNav, { passive: true });
+  syncNav();
+
+  // Clock — Oslo time, ticking
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tickClock() {
+    const now = new Date();
+    // Oslo offset approximation (UTC+1 standard, +2 DST)
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const oslo = new Date(utc + 3600000 * 2); // assume CEST
+    const t = `— ${pad(oslo.getHours())}:${pad(oslo.getMinutes())} OSL`;
+    const el = document.getElementById('clock');
+    if (el) el.textContent = t;
+  }
+  tickClock(); setInterval(tickClock, 30000);
+</script>
+
+</body>
+</html>
