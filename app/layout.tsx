@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     description:
       "Calculate your exact debt-free date. Avalanche vs. Snowball side-by-side. Free tools, no signup.",
   },
+  verification: {
+    google: "da8f942d615ed977",
+  },
   robots: {
     index: true,
     follow: true,
