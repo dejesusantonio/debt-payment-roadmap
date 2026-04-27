@@ -9,6 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Authority navy — used for dark hero, footer trust bar, confidence sections
+        navy: {
+          50:  "#f0f4fb",
+          100: "#dde6f5",
+          700: "#1a3a6b",
+          800: "#0f2855",
+          900: "#0b1f42",
+          950: "#060d1f",
+        },
         // Brand palette: deep emerald greens signal financial growth and trust
         brand: {
           50:  "#ecfdf5",

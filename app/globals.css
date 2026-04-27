@@ -30,9 +30,14 @@
     text-wrap: balance;
   }
 
-  /* Gradient text utility for hero headlines */
+  /* Gradient text utility for hero headlines on light backgrounds */
   .gradient-text {
     @apply bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent;
+  }
+
+  /* Gradient text utility for hero headlines on dark (navy) backgrounds */
+  .gradient-text-light {
+    @apply bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent;
   }
 
   /* Section spacing consistency */

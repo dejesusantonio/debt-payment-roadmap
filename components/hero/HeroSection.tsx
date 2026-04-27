@@ -34,13 +34,13 @@ const stats = [
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">
-      {/* Subtle background grid pattern */}
+    <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 border-b border-navy-800">
+      {/* Subtle dot pattern on dark background */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            "radial-gradient(circle, #059669 1px, transparent 1px)",
+            "radial-gradient(circle, #ffffff 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
         aria-hidden="true"
@@ -49,19 +49,19 @@ export default function HeroSection() {
       <div className="container-wide relative section-padding">
         <div className="mx-auto max-w-3xl text-center animate-fade-in">
           {/* Trust badge */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-100 px-4 py-1.5 text-xs font-semibold text-emerald-700 mb-6">
-            <Shield className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-xs font-semibold text-blue-100 mb-6">
+            <Shield className="h-3.5 w-3.5 text-emerald-400" />
             Free tools. No signup required. No financial data stored.
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6 text-balance">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6 text-balance">
             Crush Your Debt.{" "}
-            <span className="gradient-text">Build Real Wealth.</span>
+            <span className="gradient-text-light">Build Real Wealth.</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-8 text-balance max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-blue-100 leading-relaxed mb-8 text-balance max-w-2xl mx-auto">
             Use the same Avalanche and Snowball strategies that financial experts
             recommend. Calculate your exact debt-free date, find extra income
             streams, and get a clear payoff roadmap — all in one place.
@@ -76,7 +76,7 @@ export default function HeroSection() {
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="xl">
+            <Button asChild variant="outline-light" size="xl">
               <Link href="/#income">
                 <TrendingUp className="h-5 w-5" />
                 Find Extra Income
@@ -85,14 +85,14 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Stats row */}
+        {/* Stats row — white cards pop against the dark hero */}
         <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4 animate-slide-up">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
               <div
                 key={stat.label}
-                className="rounded-xl bg-white border border-slate-200 p-5 text-center shadow-sm hover:shadow-md hover:border-emerald-200 transition-all"
+                className="rounded-xl bg-white border border-slate-100 p-5 text-center shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
                   <Icon className="h-5 w-5 text-emerald-600" />
@@ -108,8 +108,8 @@ export default function HeroSection() {
           })}
         </div>
 
-        {/* Social proof strip */}
-        <p className="mt-8 text-center text-sm text-slate-500">
+        {/* Social proof */}
+        <p className="mt-8 text-center text-sm text-blue-200">
           Join thousands of people who used these strategies to pay off debt
           2–4× faster than minimum payments alone.
         </p>
