@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import blogPostsData from "@/data/blog-posts.json";
 
+export const dynamic = "force-static";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL ||
   "https://debt-payment-roadmap-git-main-dejesusantonios-projects.vercel.app";
