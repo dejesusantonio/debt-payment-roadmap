@@ -29,7 +29,7 @@ export function SingleDebtForm({ balance, apr, payment, onChange }: SingleDebtFo
       <div className="space-y-1.5">
         <Label htmlFor="balance">Total Debt Balance</Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">
             $
           </span>
           <Input
@@ -62,7 +62,7 @@ export function SingleDebtForm({ balance, apr, payment, onChange }: SingleDebtFo
           onValueChange={([val]) => onChange("apr", val)}
           className="mt-2"
         />
-        <div className="flex justify-between text-xs text-slate-400 mt-1">
+        <div className="flex justify-between text-xs text-slate-500 mt-1">
           <span>0% (no interest)</span>
           <span>36% (predatory)</span>
         </div>
@@ -72,7 +72,7 @@ export function SingleDebtForm({ balance, apr, payment, onChange }: SingleDebtFo
       <div className="space-y-1.5">
         <Label htmlFor="payment">Monthly Payment</Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">
             $
           </span>
           <Input
@@ -96,7 +96,7 @@ export function SingleDebtForm({ balance, apr, payment, onChange }: SingleDebtFo
           </div>
         )}
         {!paymentTooLow && payment > 0 && monthlyInterest > 0 && (
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             {formatCurrency(monthlyInterest)}/mo goes to interest ·{" "}
             {formatCurrency(payment - monthlyInterest)}/mo reduces principal
           </p>
@@ -207,7 +207,7 @@ export function MultiDebtForm({
                     <span className="text-xs text-slate-500">
                       {formatCurrency(debt.balance)}
                     </span>
-                    <Badge variant="warning" className="text-[10px]">
+                    <Badge variant="warning" className="text-xs">
                       {debt.apr}% APR
                     </Badge>
                     <span className="text-xs text-slate-400">
@@ -246,7 +246,7 @@ export function MultiDebtForm({
             />
           </div>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs">$</span>
             <Input
               type="number"
               placeholder="Balance"
@@ -273,7 +273,7 @@ export function MultiDebtForm({
             />
           </div>
           <div className="col-span-2 relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs">$</span>
             <Input
               type="number"
               placeholder="Minimum monthly payment"
@@ -314,7 +314,7 @@ export function MultiDebtForm({
             value={[extraPayment]}
             onValueChange={([val]) => onExtraPaymentChange(val)}
           />
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Any extra you can throw at debt — even $50/mo can shave years off your timeline.
           </p>
         </div>

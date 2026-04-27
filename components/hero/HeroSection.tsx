@@ -109,7 +109,7 @@ export default function HeroSection() {
         </div>
 
         {/* Social proof strip */}
-        <p className="mt-8 text-center text-sm text-slate-400">
+        <p className="mt-8 text-center text-sm text-slate-500">
           Join thousands of people who used these strategies to pay off debt
           2–4× faster than minimum payments alone.
         </p>

@@ -185,7 +185,7 @@ function MetricCard({
       >
         {value}
       </div>
-      <div className="text-[10px] text-slate-400 mt-0.5">{sub}</div>
+      <div className="text-xs text-slate-500 mt-0.5">{sub}</div>
     </div>
   );
 }
@@ -211,7 +211,7 @@ function StrategyCard({
     >
       <div className="font-semibold text-sm text-slate-900">{label}</div>
       <div className="text-xs text-slate-500 mb-2">{subtitle}</div>
-      <Badge variant={isActive ? "success" : "secondary"} className="text-[10px] mb-3">
+      <Badge variant={isActive ? "success" : "secondary"} className="text-xs mb-3">
         {badge}
       </Badge>
       <div className="space-y-1">

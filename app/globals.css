@@ -32,7 +32,7 @@
 
   /* Gradient text utility for hero headlines */
   .gradient-text {
-    @apply bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent;
   }
 
   /* Section spacing consistency */

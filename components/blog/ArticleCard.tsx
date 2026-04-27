@@ -48,7 +48,7 @@ export default function ArticleCard({ post, featured = false }: ArticleCardProps
             </div>
             <Link
               href={`/blog/${post.slug}`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
             >
               Read Article
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -71,7 +71,7 @@ export default function ArticleCard({ post, featured = false }: ArticleCardProps
         {post.excerpt}
       </p>
       <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-2 text-xs text-slate-400">
+        <div className="flex items-center gap-2 text-xs text-slate-500">
           <Clock className="h-3 w-3" />
           <span>{post.readTime} min</span>
           <span>·</span>
@@ -79,7 +79,7 @@ export default function ArticleCard({ post, featured = false }: ArticleCardProps
         </div>
         <Link
           href={`/blog/${post.slug}`}
-          className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1"
+          className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition-colors flex items-center gap-1"
         >
           Read <ArrowRight className="h-3 w-3" />
         </Link>

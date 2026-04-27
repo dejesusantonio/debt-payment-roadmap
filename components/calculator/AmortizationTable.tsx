@@ -38,8 +38,8 @@ export default function AmortizationTable({ schedule }: AmortizationTableProps) 
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="px-3 py-2.5 text-left font-semibold text-slate-600">Month</th>
                 <th className="px-3 py-2.5 text-right font-semibold text-slate-600">Payment</th>
-                <th className="px-3 py-2.5 text-right font-semibold text-red-600">Interest</th>
-                <th className="px-3 py-2.5 text-right font-semibold text-emerald-600">Principal</th>
+                <th className="px-3 py-2.5 text-right font-semibold text-red-700">Interest</th>
+                <th className="px-3 py-2.5 text-right font-semibold text-emerald-700">Principal</th>
                 <th className="px-3 py-2.5 text-right font-semibold text-slate-600">Balance</th>
               </tr>
             </thead>
@@ -55,13 +55,13 @@ export default function AmortizationTable({ schedule }: AmortizationTableProps) 
                     <td className="px-3 py-2 text-right font-mono text-slate-700">
                       {formatCurrencyExact(row.payment)}
                     </td>
-                    <td className="px-3 py-2 text-right font-mono text-red-600">
+                    <td className="px-3 py-2 text-right font-mono text-red-700">
                       {formatCurrencyExact(row.interest)}
-                      <span className="text-slate-300 ml-1">
+                      <span className="text-slate-500 ml-1">
                         ({interestPct.toFixed(0)}%)
                       </span>
                     </td>
-                    <td className="px-3 py-2 text-right font-mono text-emerald-600">
+                    <td className="px-3 py-2 text-right font-mono text-emerald-700">
                       {formatCurrencyExact(row.principal)}
                     </td>
                     <td className="px-3 py-2 text-right font-mono text-slate-900 font-medium">

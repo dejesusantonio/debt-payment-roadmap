@@ -75,7 +75,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-600 hover:text-emerald-600 transition-colors"
+                      className="text-sm text-slate-600 hover:text-emerald-700 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -88,11 +88,11 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} DebtMastery. For informational purposes
             only — not financial advice.
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Built with ❤️ to help real people reach financial freedom.
           </p>
         </div>

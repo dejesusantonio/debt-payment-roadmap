@@ -113,7 +113,7 @@ export default function HustleCard({ hustle }: HustleCardProps) {
 
       {/* Skills */}
       <div>
-        <div className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1.5">
+        <div className="text-xs uppercase tracking-wider font-semibold text-slate-500 mb-1.5">
           Skills needed
         </div>
         <div className="flex flex-wrap gap-1">
